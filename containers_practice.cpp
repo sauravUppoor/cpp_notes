@@ -69,6 +69,11 @@ int main()
     std::cout << theString << '\n';
     theString = CaesarCipher(theString, 5, false);
     std::cout << theString << '\n';
+
+    // 8. Dispalying boolean
+    bool val = true;
+    std::cout.setf(std::ios::boolalpha);
+    std::cout << val << '\n';
 }
 
 std::vector<std::string> StringToVector(std::string input, char del)
