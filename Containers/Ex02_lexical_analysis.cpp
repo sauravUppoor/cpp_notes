@@ -6,6 +6,7 @@
 #include<algorithm>
 #include<iterator>
 #include<numeric>
+// #include<boost/graph/bandwidth.hpp>
 
 // Constants
 const std::vector<std::string> operators = {",", "<", ">", ".", "_", ")", "(", ";", "$",
