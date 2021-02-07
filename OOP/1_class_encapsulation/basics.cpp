@@ -1,8 +1,14 @@
+// Struct   --> for data-only 
+//          --> default - public
+// Class    --> data + member functions
+//          --> default - private
+
+
 #include<cstdlib>
 #include<iostream>
 #include<string>
 #include<vector>
-// #include<boost/bandwidth.hpp>
+
 
 class Animal
 {
@@ -12,13 +18,20 @@ private:
     
     // static members are same for all objects of a class
     static int num_of_animals;
+ 
+    // using clause
 
 public:
+    using num_t = double;
+    std::vector<num_t> heights;
 
     std::string get_name() { return this->name;}
     void set_name(std::string name) { this->name = name;}
     double get_height() { return this->height;}
-    void set_height(double height) { this->height = height;}
+    void set_height(double height) { 
+        this->height = height;
+        heights.push_back(height);
+    }
 
     // function prototypes are also allowed
     double get_weight();
@@ -28,6 +41,7 @@ public:
     //static function to acces static members
     static int get_animal_num();
 
+    
     // constructors
     Animal(std::string, double, double);
     Animal(); // default constructor
@@ -84,6 +98,12 @@ int main()
 
     Animal tom("Tom", 33, 45);
     tom.get_all_info();
+    tom.set_height(14.0);
+    tom.set_height(16.9);
 
     tom.get_animal_num();
+
+    // access num_t alias outside class
+    for(Animal::num_t height: tom.heights)
+        std::cout << height << ' ';
 }
