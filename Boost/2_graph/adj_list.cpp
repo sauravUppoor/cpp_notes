@@ -2,6 +2,9 @@
 
 #include <boost/graph/adjacency_list.hpp>
 #include <iostream>
+#include <string>
+
+using namespace boost;
 
 int main()
 {
@@ -76,22 +79,4 @@ int main()
         std::cout << *it << ' '; // (0,1) (1,2) (2,3) (3,0)
     std::cout << '\n';
 
-
-    /***********************************
-     * Creating a weighted graph - using property list
-     ***********************************/
-
-    boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS,
-        boost::no_property, boost::property<boost::edge_weight_t, int>> g3;
-
-    boost::add_edge(topLeft, topRight, 3, g3);
-    boost::add_edge(topRight, bottomRight, 4, g3);
-    boost::add_edge(bottomRight, bottomLeft, 1, g3);
-    boost::add_edge(bottomLeft, topLeft, 10, g3);
-
-    // printing edges and weights   
-    auto e_it_2 = boost::edges(g3);
-    for(auto it = e_it_2.first; it != e_it_2.second; ++it)
-        std::cout << *it << ' '; // (0,1) (1,2) (2,3) (3,0)
-    std::cout << '\n';
 }

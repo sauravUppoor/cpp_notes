@@ -34,7 +34,9 @@ int main()
     // 2. Named paramtere - only pass the logical and mandatory ones
 
     // Create a simple graph
-    boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> g;
+    typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> graph;
+
+    graph g;
 
     enum{ topLeft, topRight, bottomRight, bottomLeft };
 
@@ -43,9 +45,23 @@ int main()
     boost::add_edge(bottomRight, bottomLeft, g);
     boost::add_edge(bottomLeft, topLeft, g);
 
+    graph::vertex_iterator vertexIt, vertexEnd;
+    graph::adjacency_iterator neighbourIt, neighbourEnd;
+
+    boost::tie(vertexIt, vertexEnd) = boost::vertices(g);
+    boost::tie(neighbourIt, neighbourEnd);
     // breadth_first_search
     // boost::bfs_visitor<boost::null_visitor> vis; // null visitor does nothing
 
+    for(; vertexIt != vertexEnd; ++vertexIt)
+    {
+        std::cout << *vertexIt << " is connected with ";
+        boost::tie(neighbourIt, neighbourEnd) = boost::adjacent_vertices(*vertexIt, g);
+        for(; neighbourIt != neighbourEnd; ++neighbourIt)
+            std::cout << *neighbourIt << ", ";
+        std::cout << "\n";
+    }
+    std::cout << "\n";
 
     /***********************************
      * User defined visitor
