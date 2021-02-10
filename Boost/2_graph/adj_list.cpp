@@ -6,25 +6,30 @@
 
 using namespace boost;
 
-int main()
+void f1()
 {
     /***********************************
      * Creating a graph - method 1
      ***********************************/
 
     // create an adjacency list, its a template
-    boost::adjacency_list<> g;
+    typedef boost::adjacency_list<> graph;
+    typedef graph::vertex_iterator vertexIt;
+    typedef graph::vertex_descriptor vertexDes;
+    typedef graph::edge_iterator edgeIt;
+    typedef graph::edge_descriptor edgeDes;
+
+    graph g;
 
     // adding vertices
     // add_vertex(g) --> return type = vertex_descriptor
-    boost::adjacency_list<>::vertex_descriptor v1 = boost::add_vertex(g);
-    boost::adjacency_list<>::vertex_descriptor v2 = boost::add_vertex(g);
-    boost::adjacency_list<>::vertex_descriptor v3 = boost::add_vertex(g);
-    boost::adjacency_list<>::vertex_descriptor v4 = boost::add_vertex(g);
+    vertexDes v1 = boost::add_vertex(g);
+    vertexDes v2 = boost::add_vertex(g);
+    vertexDes v3 = boost::add_vertex(g);
+    vertexDes v4 = boost::add_vertex(g);
     
     // Iterate over the vertices
-    typedef boost::adjacency_list<>::vertex_iterator v_it_t;
-    std::pair<v_it_t, v_it_t> v_p = boost::vertices(g);
+    std::pair<vertexIt, vertexIt> v_p = boost::vertices(g);
 
     for(auto it = v_p.first; it != v_p.second; ++it)
         std::cout << *it << ' '; // 0 1 2 3
@@ -35,7 +40,7 @@ int main()
     // Adding Edges
 
     // add_edge(u, v, g) --> return type = std::pair<edge_descriptor, bool>
-    std::pair<boost::adjacency_list<>::edge_descriptor, bool> p;
+    std::pair<edgeDes, bool> p;
 
     p = add_edge(v1, v2, g);
     p = add_edge(v2, v3, g);
@@ -43,15 +48,17 @@ int main()
     p = add_edge(v4, v1, g);
 
     // edges(g)	--> return type = std::pair<edge_iterator, edge_iterator>
-    std::pair<boost::adjacency_list<>::edge_iterator, 
-            boost::adjacency_list<>::edge_iterator> p2;
+    std::pair<edgeIt, edgeIt> p2;
     
     p2 = boost::edges(g);
 
     for(auto it = p2.first; it != p2.second; ++it)
         std::cout << *it << ' '; // (0,1) (1,2) (2,3) (3,0)
     std::cout << '\n';
+}
 
+void f2()
+{
     /***********************************
      * Creating a graph - method 2
      ***********************************/
@@ -66,7 +73,10 @@ int main()
     // Directed - directedS [others - undirectedS, bidirectedS]
     // Vertex, Edge, GraphProperties - none
     // EdgeList - listS
-    boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> g2;
+    typedef boost::adjacency_list<boost::vecS,
+                        boost::vecS, 
+                        boost::undirectedS> graph;
+    graph g2;        
     enum { topLeft, topRight, bottomRight, bottomLeft };
 
     boost::add_edge(topLeft, topRight, g2);
@@ -78,5 +88,10 @@ int main()
     for(auto it = e_it.first; it != e_it.second; ++it)
         std::cout << *it << ' '; // (0,1) (1,2) (2,3) (3,0)
     std::cout << '\n';
+}
 
+int main()
+{
+    f1();
+    f2();
 }

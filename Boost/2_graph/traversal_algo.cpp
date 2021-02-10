@@ -27,18 +27,14 @@ struct my_discover_visitor {
     }
 } vis1; // vis1 is algorithm independent
 
-int main()
+enum{ topLeft, topRight, bottomRight, bottomLeft };
+void f1()
 {
-    // Non-named vs Named Parameters
-    // 1. Non-named parameter - must pass all parameters to the algor function
-    // 2. Named paramtere - only pass the logical and mandatory ones
-
-    // Create a simple graph
+    // Create a simple undirected graph
     typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> graph;
 
     graph g;
 
-    enum{ topLeft, topRight, bottomRight, bottomLeft };
 
     boost::add_edge(topLeft, topRight, g);
     boost::add_edge(topRight, bottomRight, g);
@@ -47,6 +43,8 @@ int main()
 
     graph::vertex_iterator vertexIt, vertexEnd;
     graph::adjacency_iterator neighbourIt, neighbourEnd;
+    graph::in_edge_iterator inEdgeIt, inEdgeEnd;
+    graph::out_edge_iterator outEdgeIt, outEdgeEnd;
 
     boost::tie(vertexIt, vertexEnd) = boost::vertices(g);
     boost::tie(neighbourIt, neighbourEnd);
@@ -56,10 +54,12 @@ int main()
     for(; vertexIt != vertexEnd; ++vertexIt)
     {
         std::cout << *vertexIt << " is connected with ";
+
         boost::tie(neighbourIt, neighbourEnd) = boost::adjacent_vertices(*vertexIt, g);
         for(; neighbourIt != neighbourEnd; ++neighbourIt)
             std::cout << *neighbourIt << ", ";
         std::cout << "\n";
+
     }
     std::cout << "\n";
 
@@ -76,6 +76,7 @@ int main()
     boost::depth_first_search(g, visitor(boost::make_dfs_visitor(vis1))); // 0 1 2 3
     // making independant vis1 a dfs visitor
     std::cout << "\n";
+
 
     /***********************************
      * EventVisitor Models - 
@@ -188,7 +189,64 @@ int main()
     // Distances - 0 1 2 1
     // Discovery Time - 1 2 5 3
     // Finish Time - 4 6 8 7
+}
 
-    
+void f2()
+{
+    /***********************************
+     * Create Directed Graph
+     **********************************/
+    typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS> dirGraph;
+
+    dirGraph g1;
+
+    boost::add_edge(topLeft, topRight, g1);
+    boost::add_edge(topRight, bottomRight, g1);
+    boost::add_edge(bottomRight, bottomLeft, g1);
+    boost::add_edge(bottomLeft, topLeft, g1);
+
+    dirGraph::vertex_iterator vertexIt, vertexEnd;
+    dirGraph::adjacency_iterator neighbourIt, neighbourEnd;
+    dirGraph::in_edge_iterator inEdgeIt, inEdgeEnd;
+    dirGraph::in_edge_iterator outEdgeIt, outEdgeEnd;
+
+    boost::tie(vertexIt, vertexEnd) = boost::vertices(g1);
+    boost::tie(neighbourIt, neighbourEnd);
+    // breadth_first_search
+    // boost::bfs_visitor<boost::null_visitor> vis; // null visitor does nothing
+
+    for(; vertexIt != vertexEnd; ++vertexIt)
+    {
+        std::cout << *vertexIt << " is connected with ";
+
+        boost::tie(neighbourIt, neighbourEnd) = boost::adjacent_vertices(*vertexIt, g1);
+        for(; neighbourIt != neighbourEnd; ++neighbourIt)
+            std::cout << *neighbourIt << ", ";
+        std::cout << "\n";
+
+        // in_edges for bidirected graphs only
+        boost::tie(inEdgeIt, inEdgeEnd) = boost::in_edges(*vertexIt, g1);
+        boost::tie(outEdgeIt, outEdgeEnd) = boost::in_edges(*vertexIt, g1);
+        std::cout << "IN - ";
+        for(; inEdgeIt != inEdgeEnd; ++inEdgeIt)
+            std::cout << *inEdgeIt << ' ';
+        std::cout << "\n";
+
+        std::cout << "OUT - ";
+        for(; outEdgeIt != outEdgeEnd; ++outEdgeIt)
+            std::cout << *outEdgeIt << ' ';
+        std::cout << "\n";
+    }
+    std::cout << "\n";
+}
+
+int main()
+{
+    // Non-named vs Named Parameters
+    // 1. Non-named parameter - must pass all parameters to the algor function
+    // 2. Named paramtere - only pass the logical and mandatory ones
+
+    f1();
+    f2();
 
 }
