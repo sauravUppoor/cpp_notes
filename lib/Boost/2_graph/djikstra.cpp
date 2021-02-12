@@ -81,6 +81,11 @@ void f1()
     // Distance - 0 1 0
 }
 
+void f2()
+{
+    
+}
+
 int main()
 {
     f1();
