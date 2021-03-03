@@ -22,6 +22,11 @@ std::vector<std::string> string_to_vector(std::string, char);
 
 int main()
 {
+
+#ifdef __SIZEOF_INT128__
+    std::cout << "in";
+#endif
+    std::cout << sizeof(__int128_t) << '\n';
     std::string text;
     std::vector<std::string> tokens;
     std::string trail;
