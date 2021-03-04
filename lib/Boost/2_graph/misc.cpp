@@ -131,50 +131,37 @@ void f3()
     e7 = add_edge(2,1,2,g).first;
 
     std::vector<double> centrality1(num_vertices(g), 0.0);
-    std::vector<double> centrality2(num_edges(g), 0.0);
-    typedef property_map<graph, edge_weight_t>::type WeightMap;
-    WeightMap e_wt_map = get(edge_weight, g);
+    // std::vector<double> centrality2(num_edges(g), 0.0);
+    // typedef property_map<graph, edge_weight_t>::type WeightMap;
+    // WeightMap e_wt_map = get(edge_weight, g);
 
-    e_wt_map[e1] = 2;
-    e_wt_map[e2] = 3;
-    e_wt_map[e3] = 3;
-    e_wt_map[e4] = 2;
-    e_wt_map[e5] = 4;
-    e_wt_map[e6] = 1;
-    e_wt_map[e7] = 2;
-    iterator_property_map<std::vector<double>::iterator,
-                            WeightMap
-                            > e_itr_map(centrality1.begin(), e_wt_map);
+    // e_wt_map[e1] = 2;
+    // e_wt_map[e2] = 3;
+    // e_wt_map[e3] = 3;
+    // e_wt_map[e4] = 2;
+    // e_wt_map[e5] = 4;
+    // e_wt_map[e6] = 1;
+    // e_wt_map[e7] = 2;
 
-    // property map with vertex index
-    typedef property_map<graph, vertex_index_t>::type vertexIndexMap;
 
-    vertexIndexMap vertex_map = get(vertex_index, g);
-
-    // iterator for property map
-    iterator_property_map<std::vector<double>::iterator,
-                            vertexIndexMap
-                            > vertex_itr_map(centrality2.begin(), vertex_map);
-
-    brandes_betweenness_centrality(g, vertex_itr_map, e_wt_map);
-                            // none,
-                            // none,
-                            // none,
-                            // none,
-                            // get(vertex_index, g),
-                            // get(edge_weight, g));
+    // weighted graph Cb
+    brandes_betweenness_centrality(
+        g, 
+        centrality_map(
+            make_iterator_property_map(centrality1.begin(), get(vertex_index, g),
+                                            double()))
+        .vertex_index_map(get(vertex_index, g))
+        .weight_map(get(edge_weight, g)));
 
     std::cout << "weighted - \n";
     for(auto x: centrality1)
         std::cout << x << '\t';
     std::cout << "\n";
 
-    for(auto x: centrality2)
-        std::cout << x << '\t';
-    std::cout << "\n";
 }
 int main()
 {
+    // https://github.com/mousebird/boost/blob/master/libs/graph/test/betweenness_centrality_test.cpp
     // f1();
     f2();
     f3();
